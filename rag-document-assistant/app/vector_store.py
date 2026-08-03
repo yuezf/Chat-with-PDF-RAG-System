@@ -125,7 +125,7 @@ def add_chunks_to_vector_store(
     metadatas = []
 
     for chunk in chunks:
-        chunk_id = f"{document_name}-chunk-{chunk.chunk_index}"
+        chunk_id = f"{document_id}-chunk-{chunk.chunk_index}"
         
         ids.append(chunk_id)
         documents.append(chunk.text)
