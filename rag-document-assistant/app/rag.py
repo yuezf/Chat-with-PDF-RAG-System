@@ -15,23 +15,61 @@ client = OpenAI(
 )
 
 
-def generate_answer(query: str, top_k: int) -> dict:
+def format_page_range(metadata) -> str:
+    """
+    Turn the page range of a chunk into a string
+    """
+    start_page = metadata.get("start_page")
+    end_page = metadata.get("end_page")
+
+    if start_page is None or end_page is None:
+        return "unknown page"
+
+    if start_page == end_page:
+        return f"page {start_page}"
+
+    return f"pages {start_page}-{end_page}"
+
+
+def generate_answer(
+    query: str,
+    top_k: int,
+    user_id: str,
+    document_id: str | None = None,
+) -> dict:
     """
     Generate an answer using retrieved document chunks as context.
+
+    Retrieval is scoped by user_id and optionally document_id.
     """ 
-    retrieved_chunks = search_similar_chunks(query, top_k)
+
+    retrieved_chunks = search_similar_chunks(query, top_k, user_id, document_id)
     context_blocks = []
     sources = []
+
     for i, chunk in enumerate(retrieved_chunks, start=1):
+        metadata = chunk["metadata"]
+        page_range = format_page_range(metadata)
+
         context_blocks.append(
-            f"Source {i}:\n{chunk["text"]}"
+            f"""Source {i}
+            Document: {metadata["document_name"]}
+            Document ID: {metadata["document_id"]}
+            Location: {page_range}
+            Chunk index: {metadata["chunk_index"]}
+            
+            {chunk["text"]}"""
         )
         sources.append(
             {
                 "source_id": i,
-                "document_name": chunk["metadatas"]["document_name"],
-                "chunk_index": chunk["metadatas"]["chunk_index"],
-                "text_preview": chunk["text"][:250],
+                "document_name": metadata["document_name"],
+                "document_id": metadata["document_id"],
+                "chunk_index": metadata["chunk_index"],
+                "start_page": metadata.get("start_page"),
+                "end_page": metadata.get("end_page"),
+                "page_span": metadata.get("page_span"),
+                "text_preview": chunk["text"][:100],
                 "distance": chunk["distance"],
             }
         )
@@ -46,6 +84,9 @@ def generate_answer(query: str, top_k: int) -> dict:
     If the context does not contain enough information, say:
     "I don't have enough information in the uploaded documents to answer that."
 
+    When possible, mention the source number you use to support your points.
+    
+
     Context:
     {context}
 
@@ -55,7 +96,7 @@ def generate_answer(query: str, top_k: int) -> dict:
     Answer:
     """
 
-    reponse = client.chat.completions.create(
+    response = client.chat.completions.create(
         model=LLM_MODEL,
         messages=[
             {"role": "user", "content": prompt}
@@ -63,10 +104,12 @@ def generate_answer(query: str, top_k: int) -> dict:
         temperature=0,
     )
 
-    answer = reponse.choices[0].message.content
+    answer = response.choices[0].message.content
 
     return {
         "query": query,
+        "user_id": user_id,
+        "document_id": document_id,
         "answer": answer,
-        "sources": sources
+        "sources": sources,
     }

@@ -1,15 +1,16 @@
+from dataclasses import dataclass
 from pathlib import Path
 from pypdf import PdfReader
 
-def extract_text_from_pdf(file_path: str) -> str:
+@dataclass
+class PageText:
+    page_number: int
+    text: str
+
+
+def extract_pages_from_pdf(file_path: str) -> str:
     """
-    Extract text from a PDF file.
-
-    Args:
-        file_path: Path to the PDF file.
-
-    Returns:
-        A single string containing text from all pages.
+    Extract text from a PDF file page by page
     """
 
     path = Path(file_path)
@@ -21,12 +22,13 @@ def extract_text_from_pdf(file_path: str) -> str:
         raise ValueError("Only PDF files are supported")
 
     reader = PdfReader(path)
-
-    pages_text = []
+    pages_collection = []
     
-    for page in reader.pages:
-        text = page.extract_text()
+    for index, page in enumerate(reader.pages, start=1):
+        text = page.extract_text() or ""
+        text = text.strip()
+        
         if text:
-            pages_text.append(text)
+            pages_collection.append(PageText(page_number=index, text=text))
 
-    return "\n\n".join(pages_text)
+    return pages_collection
