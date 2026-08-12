@@ -162,7 +162,7 @@ def search_similar_chunks(
     top_k: int, 
     user_id: str,
     document_id: str | None = None,
-    max_distance: float = 0.8
+    max_distance: float = 0.3
 ) -> list[dict[str, Any]]:
     """
     Search for chunks semantically similar to the query.
@@ -188,6 +188,7 @@ def search_similar_chunks(
     for i in range(len(result["ids"][0])):
         distance = result["distances"][0][i]
         
+        # Evidence gating threshold
         if distance < max_distance:
             matches.append(
                 {

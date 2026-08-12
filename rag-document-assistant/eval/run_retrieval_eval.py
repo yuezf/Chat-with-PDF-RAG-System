@@ -1,4 +1,4 @@
-import argpasrse
+import argparse
 import json
 from pathlib import Path
 from typing import Any
@@ -62,7 +62,7 @@ def document_matches(
     return True
 
 
-def is_relavent_chunk(
+def is_relevant_chunk(
     retrieved_chunk: dict[str, Any],
     gold_pages: list[int],
     gold_document_id: str | None,
@@ -108,16 +108,16 @@ def evaluate_example(
     ]
 
     if should_answer:
-        relavent_chunks = [chunk
+        relevant_chunks = [chunk
         for chunk in retrieved_chunks
-        if is_relavent_chunk(chunk, gold_pages, gold_document_id, gold_document_name,)
+        if is_relevant_chunk(chunk, gold_pages, gold_document_id, gold_document_name,)
         ]
 
-        retrieval_hit = len(relavent_chunks) > 0
+        retrieval_hit = len(relevant_chunks) > 0
 
         source_precision = (
             len(relevant_chunks) / len(retrieved_chunks)
-            if relavent_chunks
+            if relevant_chunks
             else 0.0
         )
 
@@ -139,7 +139,7 @@ def evaluate_example(
         "gold_pages": gold_pages,
         "num_retrieved": len(retrieved_chunks),
         "retrieved_page_spans": retrieved_page_spans,
-        "retrieved_hit": retrieval_hit,
+        "retrieval_hit": retrieval_hit,
         "source_precision": source_precision,
         "refusal_retrieval_correct": refusal_retrieval_correct,
         "retrieved_sources": [
@@ -218,11 +218,11 @@ def summarize_results(results: list[dict[str, Any]]) -> dict[str, Any]:
 def print_example_result(index: int, result: dict[str, Any]) -> None:
     print("=" * 80)
     print(f"Example {index}")
-    print(f"Question: {result[question]}")
+    print(f"Question: {result['question']}")
     print(f"Should answer: {result['should_answer']}")
 
     if result["should_answer"]:
-        status = "HIT" if result["retrieved_hit"] else "MISS"
+        status = "HIT" if result["retrieval_hit"] else "MISS"
         print(f"Retrieval result: {status}")
         print(f"Gold pages: {result['gold_pages']}")
         print(f"retrieved_page_spans: {result['retrieved_page_spans']}")
@@ -269,8 +269,7 @@ def print_summary(summary: dict[str, Any]) -> None:
 
     
     if summary["refusal_retrieval_accuracy"] is not None:
-        print(f"Refusal retrieval accuracy: 
-        {summary['refusal_retrieval_accuracy']:.3f}")
+        print(f"Refusal retrieval accuracy: {summary['refusal_retrieval_accuracy']:.3f}")
     else:
         print(f"Refusal retrieval accuracy: N/A")
 
@@ -293,7 +292,80 @@ def save_results(
 
 
 def main() -> None:
-    parser = argparse.Argument
+    parser = argparse.ArgumentParser(
+        description="Run offline retrieval evaluation for the RAG system."
+    )
+
+    parser.add_argument(
+        "--eval-file",
+        default="eval/sample_eval_set.json",
+        help="Path to eval JSON file.",
+    )
+
+    parser.add_argument(
+        "--user-id",
+        required=True,
+        help="User ID whose ingested documents should be searched.",
+    )
+
+    parser.add_argument(
+        "--document-id",
+        default=None,
+        help="Optional document_id to restrict evaluation to one document.",
+    )
+
+    parser.add_argument(
+        "--top-k",
+        type=int,
+        default=5,
+        help="Number of chunks to retrieve per question.",
+    )
+
+    parser.add_argument(
+        "--max-distance",
+        type=float,
+        default=0.8,
+        help="Maximum Chroma distance allowed for retrieved chunks.",
+    )
+
+    parser.add_argument(
+        "--output-file",
+        default="eval/retrieval_eval_results.json",
+        help="Where to save detailed eval results.",
+    )
+
+    args = parser.parse_args()
+
+    eval_examples = load_eval_set(args.eval_file)
+
+    results = [
+        evaluate_example(
+            example=example,
+            user_id=args.user_id,
+            top_k=args.top_k,
+            max_distance=args.max_distance,
+            document_id=args.document_id,
+        )
+        for example in eval_examples
+    ]
+
+    for index, result in enumerate(results, start=1):
+        print_example_result(index, result)
+
+    summary = summarize_results(results)
+    print_summary(summary)
+
+    save_results(
+        output_path=args.output_file,
+        results=results,
+        summary=summary,
+    )
+
+    print(f"\nSaved detailed results to: {args.output_file}")
+
+
+if __name__ == "__main__":
+    main()
     
 
     

@@ -1,0 +1,512 @@
+[
+  {
+    "id": "attn_001",
+    "category": "concept",
+    "difficulty": "easy",
+    "question": "What is the central architectural idea of the Transformer proposed in Attention Is All You Need?",
+    "gold_answer": "The Transformer is a sequence-transduction architecture based solely on attention mechanisms, dispensing with recurrence and convolutions.",
+    "gold_document_name": "attention_is_all_you_need.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      1
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "attn_002",
+    "category": "motivation",
+    "difficulty": "medium",
+    "question": "Why do the authors say recurrent sequence models make parallelization within a training example difficult?",
+    "gold_answer": "Recurrent models compute hidden states sequentially, with each state depending on the previous hidden state, so computation across sequence positions cannot be fully parallelized.",
+    "gold_document_name": "attention_is_all_you_need.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      2
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "attn_003",
+    "category": "architecture",
+    "difficulty": "medium",
+    "question": "How is each Transformer encoder layer structured in the base architecture?",
+    "gold_answer": "The encoder has six identical layers. Each layer contains a multi-head self-attention sub-layer and a position-wise fully connected feed-forward sub-layer, with residual connections followed by layer normalization. The model dimension is 512.",
+    "gold_document_name": "attention_is_all_you_need.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      3
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "attn_004",
+    "category": "architecture",
+    "difficulty": "medium",
+    "question": "Why is masking used in the Transformer decoder self-attention layer?",
+    "gold_answer": "Masking prevents a decoder position from attending to subsequent positions. Together with the one-position offset of output embeddings, it ensures that the prediction at position i depends only on previously known outputs.",
+    "gold_document_name": "attention_is_all_you_need.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      3
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "attn_005",
+    "category": "exact_mechanism",
+    "difficulty": "medium",
+    "question": "How is scaled dot-product attention computed?",
+    "gold_answer": "The model takes dot products between queries and keys, divides them by the square root of the key dimension, applies softmax to obtain attention weights, and uses those weights to form a weighted sum of the values.",
+    "gold_document_name": "attention_is_all_you_need.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      4
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "attn_006",
+    "category": "reasoning",
+    "difficulty": "hard",
+    "question": "Why do the authors divide attention dot products by the square root of the key dimension?",
+    "gold_answer": "For large key dimensions, dot products can grow large in magnitude and push softmax into regions with extremely small gradients. Scaling by the square root of the key dimension counteracts this effect.",
+    "gold_document_name": "attention_is_all_you_need.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      4
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "attn_007",
+    "category": "exact_detail",
+    "difficulty": "medium",
+    "question": "How many parallel attention heads does the base Transformer use, and what are the key and value dimensions per head?",
+    "gold_answer": "The base Transformer uses 8 attention heads, with key and value dimensions of 64 per head.",
+    "gold_document_name": "attention_is_all_you_need.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      5
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "attn_008",
+    "category": "architecture",
+    "difficulty": "hard",
+    "question": "What are the three ways multi-head attention is used inside the Transformer?",
+    "gold_answer": "It is used as encoder-decoder attention, as self-attention in the encoder, and as masked self-attention in the decoder.",
+    "gold_document_name": "attention_is_all_you_need.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      5
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "attn_009",
+    "category": "positional_encoding",
+    "difficulty": "medium",
+    "question": "Why does the Transformer need positional encodings, and what form of positional encoding is used in the paper?",
+    "gold_answer": "Because the model contains neither recurrence nor convolution, it needs explicit information about token order. The paper uses sine and cosine functions of different frequencies for positional encoding.",
+    "gold_document_name": "attention_is_all_you_need.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      6
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "attn_010",
+    "category": "comparison",
+    "difficulty": "hard",
+    "question": "According to Table 1, how do self-attention and recurrent layers compare in sequential operations and maximum path length?",
+    "gold_answer": "Self-attention requires O(1) sequential operations and has O(1) maximum path length, while a recurrent layer requires O(n) sequential operations and has O(n) maximum path length.",
+    "gold_document_name": "attention_is_all_you_need.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      6
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "attn_011",
+    "category": "training",
+    "difficulty": "medium",
+    "question": "What hardware and training schedule were used for the base and big Transformer models?",
+    "gold_answer": "The models were trained on one machine with 8 NVIDIA P100 GPUs. Base models were trained for 100,000 steps, about 12 hours, while big models were trained for 300,000 steps, about 3.5 days.",
+    "gold_document_name": "attention_is_all_you_need.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      7
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "attn_012",
+    "category": "training",
+    "difficulty": "hard",
+    "question": "What optimizer settings and warmup period were used to train the Transformer?",
+    "gold_answer": "The paper uses Adam with beta1 = 0.9, beta2 = 0.98, and epsilon = 1e-9, with a learning-rate schedule that uses 4000 warmup steps.",
+    "gold_document_name": "attention_is_all_you_need.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      7
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "attn_013",
+    "category": "exact_result",
+    "difficulty": "medium",
+    "question": "According to Table 2, what BLEU scores does the Transformer big model achieve on WMT 2014 English-to-German and English-to-French?",
+    "gold_answer": "The Transformer big model achieves 28.4 BLEU on English-to-German and 41.8 BLEU on English-to-French.",
+    "gold_document_name": "attention_is_all_you_need.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      8
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "attn_014",
+    "category": "ablation",
+    "difficulty": "hard",
+    "question": "What did the model-variation experiments show about using a single attention head or too many attention heads?",
+    "gold_answer": "Single-head attention was 0.9 BLEU worse than the best setting, and quality also dropped when the model used too many heads.",
+    "gold_document_name": "attention_is_all_you_need.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      9
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "attn_015",
+    "category": "generalization",
+    "difficulty": "medium",
+    "question": "What F1 score did the four-layer Transformer achieve in the semi-supervised English constituency parsing setting?",
+    "gold_answer": "The four-layer Transformer achieved 92.7 F1 in the semi-supervised setting.",
+    "gold_document_name": "attention_is_all_you_need.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      10
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "attn_016",
+    "category": "future_work",
+    "difficulty": "medium",
+    "question": "What future directions do the authors identify in the conclusion of Attention Is All You Need?",
+    "gold_answer": "They plan to apply attention-based models to other tasks, extend the Transformer to modalities such as images, audio, and video, investigate local or restricted attention for large inputs and outputs, and make generation less sequential.",
+    "gold_document_name": "attention_is_all_you_need.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      10
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "rag_001",
+    "category": "stack",
+    "difficulty": "easy",
+    "question": "What main technologies does the RAG Document Assistant currently use?",
+    "gold_answer": "It uses FastAPI for the HTTP API, PyPDF for PDF text extraction, ChromaDB for persistent vector storage, Ollama through an OpenAI-compatible API for embeddings and answer generation, and SHA-256 plus UUID5 for deterministic document identity.",
+    "gold_document_name": "rag_system_readme.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      1
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "rag_002",
+    "category": "architecture",
+    "difficulty": "medium",
+    "question": "What are the major stages of the current document-ingestion flow?",
+    "gold_answer": "The flow uploads a PDF, writes a temporary file, computes a SHA-256 hash, generates a deterministic document ID, extracts text page by page, builds continuous text with page offsets, creates overlapping cross-page chunks, generates embeddings, and upserts the chunks with metadata into ChromaDB.",
+    "gold_document_name": "rag_system_readme.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      2
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "rag_003",
+    "category": "cross_page",
+    "difficulty": "hard",
+    "question": "Describe the current query flow from a user question to the final grounded answer.",
+    "gold_answer": "The system embeds the question, performs user-scoped Chroma search with optional document filtering, applies top-k distance filtering, constructs context, sends a grounded prompt to the LLM, and returns an answer with document and page sources.",
+    "gold_document_name": "rag_system_readme.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      2,
+      3
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "rag_004",
+    "category": "chunking",
+    "difficulty": "medium",
+    "question": "Why does the RAG system use page-aware cross-page chunking?",
+    "gold_answer": "It allows chunks to preserve context that crosses a page boundary while still retaining page metadata for source attribution. Each chunk records fields such as start_page, end_page, and page_span.",
+    "gold_document_name": "rag_system_readme.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      3
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "rag_005",
+    "category": "document_identity",
+    "difficulty": "medium",
+    "question": "How does deterministic document identity behave for the same file across users and for modified files?",
+    "gold_answer": "The document ID is derived from user_id and the SHA-256 content hash. The same user and same file bytes produce the same ID; different users with the same file produce different IDs; modifying the file produces a different ID.",
+    "gold_document_name": "rag_system_readme.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      3
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "rag_006",
+    "category": "idempotency",
+    "difficulty": "medium",
+    "question": "How does the system handle an exact duplicate upload, and what is force_reprocess intended for?",
+    "gold_answer": "An exact duplicate is skipped by default. force_reprocess deletes the existing chunks and rebuilds the document when the file is unchanged but processing settings or logic, such as chunking, metadata, or the embedding model, need to be changed.",
+    "gold_document_name": "rag_system_readme.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      4
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "rag_007",
+    "category": "tenant_isolation",
+    "difficulty": "hard",
+    "question": "How is retrieval isolated between users, and why is this not yet a complete security boundary?",
+    "gold_answer": "Every retrieval is filtered by user_id and can optionally be restricted by document_id. However, user_id is supplied by the client, so this is metadata isolation rather than full security isolation; production should derive identity from verified authentication credentials.",
+    "gold_document_name": "rag_system_readme.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      4
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "rag_008",
+    "category": "persistence",
+    "difficulty": "easy",
+    "question": "How does the current system persist embeddings across application restarts?",
+    "gold_answer": "ChromaDB uses a local persistent directory, allowing stored embeddings to survive application restarts.",
+    "gold_document_name": "rag_system_readme.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      5
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "rag_009",
+    "category": "module_responsibility",
+    "difficulty": "medium",
+    "question": "What responsibilities does vector_store.py have in the project?",
+    "gold_answer": "vector_store.py handles embeddings, Chroma persistence, metadata filtering, duplicate checks, and deletion.",
+    "gold_document_name": "rag_system_readme.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      6
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "rag_010",
+    "category": "health_check",
+    "difficulty": "medium",
+    "question": "What does the current /health endpoint verify, and what does it not verify?",
+    "gold_answer": "It verifies only that the FastAPI process is responsive. It does not yet verify ChromaDB availability or model availability.",
+    "gold_document_name": "rag_system_readme.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      7
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "rag_011",
+    "category": "exact_parameter",
+    "difficulty": "medium",
+    "question": "What are the default chunk_size, overlap, and force_reprocess values for the /ingest endpoint?",
+    "gold_answer": "The default chunk_size is 500 characters, overlap is 50 characters, and force_reprocess defaults to false.",
+    "gold_document_name": "rag_system_readme.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      8
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "rag_012",
+    "category": "endpoint_behavior",
+    "difficulty": "medium",
+    "question": "What does the /search endpoint return, and what happens when document_id is omitted?",
+    "gold_answer": "The /search endpoint returns matching chunks, metadata, and vector distance without calling the chat model. If document_id is omitted, it searches all documents belonging to the user.",
+    "gold_document_name": "rag_system_readme.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      9
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "rag_013",
+    "category": "security",
+    "difficulty": "medium",
+    "question": "Why should /collection-info not be publicly exposed in production?",
+    "gold_answer": "It returns all stored Chroma items and can reveal document content and metadata across users, so it is intended for debugging rather than public production access.",
+    "gold_document_name": "rag_system_readme.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      10
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "rag_014",
+    "category": "evaluation_metric",
+    "difficulty": "medium",
+    "question": "How is retrieval hit rate defined in the README's evaluation design?",
+    "gold_answer": "An answerable example is a retrieval hit when at least one retrieved chunk overlaps the labeled gold pages in the correct document. Retrieval hit rate is the number of retrieval hits divided by the number of answerable questions.",
+    "gold_document_name": "rag_system_readme.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      11
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "rag_015",
+    "category": "evaluation_metric",
+    "difficulty": "hard",
+    "question": "How is refusal retrieval accuracy currently defined, and what limitation of that definition does the README acknowledge?",
+    "gold_answer": "For should_answer=false questions, retrieval is considered correct when no chunk passes the evidence threshold. The README notes that this is imperfect because a semantically similar retrieved chunk does not necessarily mean the question is actually answerable.",
+    "gold_document_name": "rag_system_readme.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      12
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "rag_016",
+    "category": "cross_page",
+    "difficulty": "hard",
+    "question": "What kinds of PDF content or layouts does the current extraction pipeline not support well?",
+    "gold_answer": "The system does not currently support scanned image-only PDFs, OCR, reliable table reconstruction, chart or figure understanding, complex multi-column layouts, or embedded images.",
+    "gold_document_name": "rag_system_readme.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      12,
+      13
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "rag_017",
+    "category": "failure_mode",
+    "difficulty": "hard",
+    "question": "What risk does the README identify in the current forced-reprocessing workflow?",
+    "gold_answer": "The system deletes old chunks before extracting, chunking, embedding, and inserting the replacement. If the new processing fails after deletion, the previously valid document representation can be lost. A safer design would write a new version first and activate it only after success.",
+    "gold_document_name": "rag_system_readme.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      13
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "rag_018",
+    "category": "retrieval_limitation",
+    "difficulty": "hard",
+    "question": "What retrieval methods are missing from the current semantic-only retrieval layer, and what kinds of queries can vector search struggle with?",
+    "gold_answer": "The current system lacks keyword or BM25 search, hybrid score fusion, cross-encoder reranking, metadata-aware ranking, query rewriting, and multi-query retrieval. Vector search can struggle with exact names, numbers, IDs, dates, formulas, and uncommon acronyms.",
+    "gold_document_name": "rag_system_readme.pdf",
+    "gold_document_id": null,
+    "gold_pages": [
+      14
+    ],
+    "should_answer": true
+  },
+  {
+    "id": "unans_001",
+    "category": "unanswerable",
+    "difficulty": "medium",
+    "question": "Which payment processor is used by the RAG Document Assistant?",
+    "gold_answer": null,
+    "gold_document_name": null,
+    "gold_document_id": null,
+    "gold_pages": [],
+    "should_answer": false
+  },
+  {
+    "id": "unans_002",
+    "category": "unanswerable",
+    "difficulty": "hard",
+    "question": "What Kubernetes cluster configuration is used to deploy the RAG Document Assistant?",
+    "gold_answer": null,
+    "gold_document_name": null,
+    "gold_document_id": null,
+    "gold_pages": [],
+    "should_answer": false
+  },
+  {
+    "id": "unans_003",
+    "category": "unanswerable",
+    "difficulty": "hard",
+    "question": "What BLEU score does the RAG Document Assistant itself achieve on WMT 2014 English-to-German?",
+    "gold_answer": null,
+    "gold_document_name": null,
+    "gold_document_id": null,
+    "gold_pages": [],
+    "should_answer": false
+  },
+  {
+    "id": "unans_004",
+    "category": "unanswerable",
+    "difficulty": "medium",
+    "question": "Does Attention Is All You Need use rotary positional embeddings (RoPE), and what RoPE base frequency does it choose?",
+    "gold_answer": null,
+    "gold_document_name": null,
+    "gold_document_id": null,
+    "gold_pages": [],
+    "should_answer": false
+  },
+  {
+    "id": "unans_005",
+    "category": "unanswerable",
+    "difficulty": "medium",
+    "question": "Which PostgreSQL schema stores the RAG system's document registry?",
+    "gold_answer": null,
+    "gold_document_name": null,
+    "gold_document_id": null,
+    "gold_pages": [],
+    "should_answer": false
+  },
+  {
+    "id": "unans_006",
+    "category": "unanswerable",
+    "difficulty": "hard",
+    "question": "What accuracy did the Transformer achieve on the ImageNet image-classification benchmark in Attention Is All You Need?",
+    "gold_answer": null,
+    "gold_document_name": null,
+    "gold_document_id": null,
+    "gold_pages": [],
+    "should_answer": false
+  }
+]
